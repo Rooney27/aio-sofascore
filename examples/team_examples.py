@@ -76,12 +76,12 @@ async def show_transfers(client, team_id):
         print("No outgoing transfers")
 
 async def main():
-    client = SofaScoreClient("http://api.sofascore.com")
-    await show_players(client, TEAM_ID)
-    await show_last_events(client, TEAM_ID, PAGE)
-    await show_performance(client, TEAM_ID)
-    await show_rankings(client, TEAM_ID)
-    await show_transfers(client, TEAM_ID)
+    async with SofaScoreClient() as client:
+        await show_players(client, TEAM_ID)
+        await show_last_events(client, TEAM_ID, PAGE)
+        await show_performance(client, TEAM_ID)
+        await show_rankings(client, TEAM_ID)
+        await show_transfers(client, TEAM_ID)
 
 if __name__ == "__main__":
     asyncio.run(main()) 

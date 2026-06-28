@@ -1,0 +1,22 @@
+{
+  "players": [
+    {
+      "player": {
+        "id": 1,
+        "name": "Bruno Fernandes",
+        "shortName": "B. Fernandes",
+        "position": "M",
+        "jerseyNumber": "8"
+      }
+    },
+    {
+      "player": {
+        "id": 2,
+        "name": "Marcus Rashford",
+        "shortName": "M. Rashford",
+        "position": "F",
+        "jerseyNumber": "10"
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "type": "team",
+      "entity": {
+        "id": 2819,
+        "name": "Manchester United",
+        "nameCode": "MUN",
+        "teamColors": {
+          "primary": "#DA020E",
+          "secondary": "#FFE500",
+          "text": "#FFFFFF"
+        }
+      }
+    },
+    {
+      "type": "player",
+      "entity": {
+        "id": 1,
+        "name": "Bruno Fernandes",
+        "shortName": "B. Fernandes",
+        "team": {
+          "id": 2819,
+          "name": "Manchester United",
+          "teamColors": {
+            "primary": "#DA020E",
+            "secondary": "#FFE500",
+            "text": "#FFFFFF"
+          }
+        }
+      }
+    }
+  ]
+}
