@@ -193,4 +193,29 @@ class TeamTransfersResponse(BaseModel):
 
 class TeamLastEventsResponse(BaseModel):
     events: Optional[List[PerformanceEvent]] = None
-    hasNextPage: Optional[bool] = None 
+    hasNextPage: Optional[bool] = None
+
+
+class StatisticsSeason(BaseModel):
+    id: Optional[int] = None
+    name: Optional[str] = None
+    year: Optional[str] = None
+
+
+class StatisticsUniqueTournament(BaseModel):
+    id: Optional[int] = None
+    name: Optional[str] = None
+    slug: Optional[str] = None
+
+
+class UniqueTournamentSeasonItem(BaseModel):
+    uniqueTournament: Optional[StatisticsUniqueTournament] = None
+    seasons: Optional[List[StatisticsSeason]] = None
+
+
+class TeamStatisticsSeasonsResponse(BaseModel):
+    uniqueTournamentSeasons: Optional[List[UniqueTournamentSeasonItem]] = None
+
+
+class TeamStatisticsResponse(BaseModel):
+    statistics: Optional[dict] = None

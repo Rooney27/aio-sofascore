@@ -30,14 +30,46 @@ def search_response():
     return load_fixture("search_results.json")
 
 
+@pytest.fixture
+def team_statistics_seasons_response():
+    return load_fixture("team_statistics_seasons.json")
+
+
+@pytest.fixture
+def team_statistics_response():
+    return load_fixture("team_statistics.json")
+
+
+@pytest.fixture
+def team_last_events_responses():
+    return {
+        0: load_fixture("team_last_events_page0.json"),
+        1: load_fixture("team_last_events_page1.json"),
+    }
+
+
 @pytest_asyncio.fixture
-async def mock_client(team_info_response, team_players_response, search_response):
+async def mock_client(
+    team_info_response,
+    team_players_response,
+    search_response,
+    team_statistics_seasons_response,
+    team_statistics_response,
+    team_last_events_responses,
+):
     """Client with mocked HTTP responses for unit tests."""
     client = SofaScoreClient(base_url="https://api.sofascore.com")
 
     async def mock_get(path: str, params: dict | None = None):
         if path.startswith("/api/v1/team/") and path.endswith("/players"):
             return team_players_response
+        if path.endswith("/statistics/seasons"):
+            return team_statistics_seasons_response
+        if "/statistics/" in path:
+            return team_statistics_response
+        if "/events/last/" in path:
+            page = int(path.rsplit("/", 1)[-1])
+            return team_last_events_responses.get(page, {"events": [], "hasNextPage": False})
         if path.startswith("/api/v1/team/"):
             return team_info_response
         if path == "/v1/search/all":

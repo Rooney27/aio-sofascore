@@ -1,0 +1,12 @@
+{
+  "events": [
+    {
+      "id": 1002,
+      "slug": "team-c-team-d",
+      "startTimestamp": 1699900000,
+      "homeTeam": {"id": 3, "name": "Team C", "slug": "team-c"},
+      "awayTeam": {"id": 4, "name": "Team D", "slug": "team-d"}
+    }
+  ],
+  "hasNextPage": false
+}

@@ -10,6 +10,10 @@ from aiosofascore.api.soccer.services.team import (
     TeamPlayersService,
     TeamRankingsRepository,
     TeamRankingsService,
+    TeamStatisticsRepository,
+    TeamStatisticsSeasonsRepository,
+    TeamStatisticsSeasonsService,
+    TeamStatisticsService,
     TeamTransfersRepository,
     TeamTransfersService,
 )
@@ -26,13 +30,10 @@ class SofaScoreTeamServices:
         self.players = TeamPlayersService(TeamPlayersRepository(http))
         self.rankings = TeamRankingsService(TeamRankingsRepository(http))
         self.transfers = TeamTransfersService(TeamTransfersRepository(http))
-
-
-class SofaScoreSearchServices:
-    """Groups search services."""
-
-    def __init__(self, http: HttpSessionManager):
-        self.search = SearchService(SearchRepository(http))
+        self.statistics_seasons = TeamStatisticsSeasonsService(
+            TeamStatisticsSeasonsRepository(http)
+        )
+        self.statistics = TeamStatisticsService(TeamStatisticsRepository(http))
 
 
 class SofaScoreClient:
@@ -42,6 +43,8 @@ class SofaScoreClient:
     Example:
         async with SofaScoreClient() as client:
             players = await client.team.players.get_team_players(team_id)
+            async for team in client.search.search_teams("Arsenal"):
+                print(team.entity.name)
     """
 
     def __init__(
@@ -60,7 +63,7 @@ class SofaScoreClient:
             max_retries=max_retries,
         )
         self.team = SofaScoreTeamServices(self.http)
-        self.search = SofaScoreSearchServices(self.http)
+        self.search = SearchService(SearchRepository(self.http))
 
     async def __aenter__(self) -> "SofaScoreClient":
         await self.http.open()

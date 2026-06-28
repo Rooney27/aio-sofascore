@@ -75,6 +75,28 @@ async def show_transfers(client, team_id):
     else:
         print("No outgoing transfers")
 
+async def show_statistics(client, team_id):
+    print("\n=== Statistics seasons ===")
+    seasons = await client.team.statistics_seasons.get_statistics_seasons(team_id)
+    if not seasons.uniqueTournamentSeasons:
+        print("No statistics seasons found")
+        return
+    item = seasons.uniqueTournamentSeasons[0]
+    tournament = item.uniqueTournament
+    season = item.seasons[0] if item.seasons else None
+    if not tournament or not season:
+        print("No tournament/season data")
+        return
+    print(f"Tournament: {tournament.name}, Season: {season.name}")
+    stats = await client.team.statistics.get_statistics(
+        team_id, tournament.id, season.id
+    )
+    if stats.statistics:
+        for key, value in list(stats.statistics.items())[:5]:
+            print(f"  {key}: {value}")
+    else:
+        print("No statistics data")
+
 async def main():
     async with SofaScoreClient() as client:
         await show_players(client, TEAM_ID)
@@ -82,6 +104,7 @@ async def main():
         await show_performance(client, TEAM_ID)
         await show_rankings(client, TEAM_ID)
         await show_transfers(client, TEAM_ID)
+        await show_statistics(client, TEAM_ID)
 
 if __name__ == "__main__":
     asyncio.run(main()) 
