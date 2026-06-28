@@ -62,6 +62,9 @@ class SofaScoreClient:
         headers: dict[str, str] | None = None,
         proxy: str | None = None,
         max_retries: int = 3,
+        transport: str | None = None,
+        impersonate: str | None = None,
+        warmup: bool | None = None,
     ):
         self.http = HttpSessionManager(
             base_url=base_url or DEFAULT_BASE_URL,
@@ -69,6 +72,9 @@ class SofaScoreClient:
             headers=headers,
             proxy=proxy,
             max_retries=max_retries,
+            transport=transport,
+            impersonate=impersonate,
+            warmup=warmup,
         )
         self.team = SofaScoreTeamServices(self.http)
         self.search = SearchService(SearchRepository(self.http))

@@ -16,5 +16,8 @@ setup(
         "Operating System :: OS Independent",
     ],
     install_requires=["aiohttp", "pydantic"],
+    extras_require={
+        "curl": ["curl_cffi>=0.6.0"],
+    },
     python_requires=">=3.10",  # Укажите минимальную версию Python
 )
