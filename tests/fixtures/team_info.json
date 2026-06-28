@@ -1,0 +1,26 @@
+{
+  "team": {
+    "id": 2819,
+    "name": "Manchester United",
+    "slug": "manchester-united",
+    "shortName": "Man Utd",
+    "gender": "M",
+    "sport": {"id": 1, "name": "Football", "slug": "football"},
+    "category": {"id": 1, "name": "England", "slug": "england"},
+    "tournament": {"id": 1, "name": "Premier League", "slug": "premier-league"},
+    "primaryUniqueTournament": {"id": 17, "name": "Premier League", "slug": "premier-league"},
+    "userCount": 1000000,
+    "nameCode": "MUN",
+    "national": false,
+    "type": 0,
+    "country": {"alpha2": "EN", "alpha3": "ENG", "name": "England", "slug": "england"},
+    "fullName": "Manchester United",
+    "teamColors": {"primary": "#DA020E", "secondary": "#FFE500", "text": "#FFFFFF"},
+    "manager": null,
+    "venue": null,
+    "disabled": false,
+    "foundationDateTimestamp": null,
+    "fieldTranslations": null,
+    "timeActive": null
+  }
+}

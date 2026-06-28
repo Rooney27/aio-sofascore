@@ -1,40 +1,74 @@
-from aiosofascore.adapters.http_client import HttpSessionManager
+from aiosofascore.adapters.http_client import DEFAULT_BASE_URL, HttpSessionManager
 from aiosofascore.api.soccer.services.team import (
-    TeamPerformanceService, TeamPerformanceRepository,
-    TeamInfoService, TeamInfoRepository,
-    TeamLastEventsService, TeamLastEventsRepository,
-    TeamPlayersService, TeamPlayersRepository,
-    TeamRankingsService, TeamRankingsRepository,
-    TeamTransfersService, TeamTransfersRepository
+    TeamInfoRepository,
+    TeamInfoService,
+    TeamLastEventsRepository,
+    TeamLastEventsService,
+    TeamPerformanceRepository,
+    TeamPerformanceService,
+    TeamPlayersRepository,
+    TeamPlayersService,
+    TeamRankingsRepository,
+    TeamRankingsService,
+    TeamTransfersRepository,
+    TeamTransfersService,
 )
-from aiosofascore.api.soccer.services.search import SearchService, SearchRepository
+from aiosofascore.api.soccer.services.search import SearchRepository, SearchService
+
 
 class SofaScoreTeamServices:
     """Groups all team-related services."""
+
     def __init__(self, http: HttpSessionManager):
-        self.performance: TeamPerformanceService = TeamPerformanceService(TeamPerformanceRepository(http))
-        self.info: TeamInfoService = TeamInfoService(TeamInfoRepository(http))
-        self.last_events: TeamLastEventsService = TeamLastEventsService(TeamLastEventsRepository(http))
-        self.players: TeamPlayersService = TeamPlayersService(TeamPlayersRepository(http))
-        self.rankings: TeamRankingsService = TeamRankingsService(TeamRankingsRepository(http))
-        self.transfers: TeamTransfersService = TeamTransfersService(TeamTransfersRepository(http))
+        self.performance = TeamPerformanceService(TeamPerformanceRepository(http))
+        self.info = TeamInfoService(TeamInfoRepository(http))
+        self.last_events = TeamLastEventsService(TeamLastEventsRepository(http))
+        self.players = TeamPlayersService(TeamPlayersRepository(http))
+        self.rankings = TeamRankingsService(TeamRankingsRepository(http))
+        self.transfers = TeamTransfersService(TeamTransfersRepository(http))
+
 
 class SofaScoreSearchServices:
     """Groups search services."""
+
     def __init__(self, http: HttpSessionManager):
-        self.search: SearchService = SearchService(SearchRepository(http))
+        self.search = SearchService(SearchRepository(http))
+
 
 class SofaScoreClient:
     """
     Main facade for working with the SofaScore API.
-    Example:
-        client = SofaScoreClient(base_url="http://api.sofascore.com")
-        players = await client.team.players.get_team_players(team_id)
-    """
-    def __init__(self, base_url: str):
-        self.http: HttpSessionManager = HttpSessionManager(base_url=base_url)
-        self.team: SofaScoreTeamServices = SofaScoreTeamServices(self.http)
-        self.search: SofaScoreSearchServices = SofaScoreSearchServices(self.http)
 
-class BaseClient:
-    pass
+    Example:
+        async with SofaScoreClient() as client:
+            players = await client.team.players.get_team_players(team_id)
+    """
+
+    def __init__(
+        self,
+        base_url: str | None = None,
+        cookies: dict[str, str] | None = None,
+        headers: dict[str, str] | None = None,
+        proxy: str | None = None,
+        max_retries: int = 3,
+    ):
+        self.http = HttpSessionManager(
+            base_url=base_url or DEFAULT_BASE_URL,
+            cookies=cookies,
+            headers=headers,
+            proxy=proxy,
+            max_retries=max_retries,
+        )
+        self.team = SofaScoreTeamServices(self.http)
+        self.search = SofaScoreSearchServices(self.http)
+
+    async def __aenter__(self) -> "SofaScoreClient":
+        await self.http.open()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        await self.http.close()
+
+    async def close(self) -> None:
+        """Close the underlying HTTP session."""
+        await self.http.close()
