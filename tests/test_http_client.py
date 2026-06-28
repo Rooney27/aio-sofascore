@@ -56,7 +56,9 @@ async def test_lazy_session_open_on_get():
 
 @pytest.mark.asyncio
 async def test_retry_on_retryable_status():
-    http = HttpSessionManager(max_retries=2, retry_base_delay=0.01, transport="aiohttp", warmup=False)
+    http = HttpSessionManager(
+        max_retries=2, retry_base_delay=0.01, transport="aiohttp", warmup=False
+    )
 
     call_count = 0
 
@@ -91,7 +93,9 @@ async def test_retry_on_retryable_status():
 
 @pytest.mark.asyncio
 async def test_raises_after_max_retries():
-    http = HttpSessionManager(max_retries=1, retry_base_delay=0.01, transport="aiohttp", warmup=False)
+    http = HttpSessionManager(
+        max_retries=1, retry_base_delay=0.01, transport="aiohttp", warmup=False
+    )
 
     resp = MagicMock()
     resp.status = 403

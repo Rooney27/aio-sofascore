@@ -18,7 +18,7 @@ class SearchResult:
             "q": self.query,
             "page": self.page,
         }
-        resp = await self.http.get("/v1/search/all", params=params)
+        resp = await self.http.get("/api/v1/search/all", params=params)
         return [SearchEntityResult(**e) for e in resp["results"]]
 
 

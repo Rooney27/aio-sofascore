@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Changed
+- **Breaking fix:** default API base URL changed from `https://api.sofascore.com` to `https://www.sofascore.com`
+- Search endpoint fixed: `/api/v1/search/all` (was `/v1/search/all`)
+
 ## 0.2.0
 
 ### Added

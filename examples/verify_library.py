@@ -7,7 +7,7 @@
     python examples/verify_library.py
 
 Cookies (обязательно для обхода 403):
-    1. DevTools → Network → запрос к api.sofascore.com → Request Headers → Cookie
+    1. DevTools → Network → запрос к www.sofascore.com/api/... → Request Headers → Cookie
     2. Сохраните в cookies.txt (вся строка Cookie как есть)
     3. export SOFASCORE_COOKIES_FILE=cookies.txt
     python examples/verify_library.py
@@ -80,29 +80,57 @@ async def verify(client: SofaScoreClient) -> list[CheckResult]:
     results: list[CheckResult] = []
 
     section("1. Team — команда")
-    results.append(await run_check("team.info.get_team_info", lambda: _check_team_info(client)))
-    results.append(await run_check("team.players.get_team_players", lambda: _check_team_players(client)))
-    results.append(await run_check("team.last_events.get_last_events", lambda: _check_last_events(client)))
-    results.append(await run_check("team.rankings.get_team_rankings", lambda: _check_rankings(client)))
+    results.append(
+        await run_check("team.info.get_team_info", lambda: _check_team_info(client))
+    )
+    results.append(
+        await run_check(
+            "team.players.get_team_players", lambda: _check_team_players(client)
+        )
+    )
+    results.append(
+        await run_check(
+            "team.last_events.get_last_events", lambda: _check_last_events(client)
+        )
+    )
+    results.append(
+        await run_check(
+            "team.rankings.get_team_rankings", lambda: _check_rankings(client)
+        )
+    )
 
     section("2. Search — поиск")
-    results.append(await run_check("search.search_teams", lambda: _check_search_teams(client)))
+    results.append(
+        await run_check("search.search_teams", lambda: _check_search_teams(client))
+    )
 
     section("3. Live — live-матчи")
     results.append(await run_check("live.get_live_events", lambda: _check_live(client)))
 
     section("4. Tournament — турниры")
-    results.append(await run_check("tournament.get_categories", lambda: _check_categories(client)))
-    results.append(await run_check("tournament.get_standings", lambda: _check_standings(client, TOURNAMENT_ID)))
+    results.append(
+        await run_check("tournament.get_categories", lambda: _check_categories(client))
+    )
+    results.append(
+        await run_check(
+            "tournament.get_standings", lambda: _check_standings(client, TOURNAMENT_ID)
+        )
+    )
 
     section("5. Team statistics — статистика команды")
-    results.append(await run_check("team.statistics", lambda: _check_team_statistics(client)))
+    results.append(
+        await run_check("team.statistics", lambda: _check_team_statistics(client))
+    )
 
     section("6. Event — матч (через поиск)")
-    results.append(await run_check("event via search", lambda: _check_event_via_search(client)))
+    results.append(
+        await run_check("event via search", lambda: _check_event_via_search(client))
+    )
 
     section("7. Player — игрок (через поиск)")
-    results.append(await run_check("player via search", lambda: _check_player_via_search(client)))
+    results.append(
+        await run_check("player via search", lambda: _check_player_via_search(client))
+    )
 
     return results
 
@@ -164,7 +192,9 @@ async def _check_team_statistics(client: SofaScoreClient) -> str:
     season = item.seasons[0] if item.seasons else None
     if not item.uniqueTournament or not season:
         return ok("нет данных")
-    stats = await client.team.statistics.get_statistics(TEAM_ID, item.uniqueTournament.id, season.id)
+    stats = await client.team.statistics.get_statistics(
+        TEAM_ID, item.uniqueTournament.id, season.id
+    )
     return ok(f"полей статистики: {len(stats.statistics or {})}")
 
 
@@ -226,8 +256,8 @@ def print_summary(results: list[CheckResult], transport: str, has_cookies: bool)
             "  SofaScore (Akamai) проверяет TLS-отпечаток клиента.\n"
             "\n  Что сделать:\n"
             "  1. pip install 'aiosofascore[curl]'\n"
-            "  2. Скопируйте Cookie из DevTools для запроса к api.sofascore.com\n"
-            "     (Network → api.sofascore.com → Headers → Cookie — целиком)\n"
+            "  2. Скопируйте Cookie из DevTools для запроса к www.sofascore.com/api/...\n"
+            "     (Network → www.sofascore.com → Headers → Cookie — целиком)\n"
             "  3. Сохраните в cookies.txt и запустите:\n"
             "     export SOFASCORE_COOKIES_FILE=cookies.txt\n"
             "     export SOFASCORE_TRANSPORT=curl\n"
@@ -249,7 +279,9 @@ def print_summary(results: list[CheckResult], transport: str, has_cookies: bool)
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Проверка aiosofascore")
-    parser.add_argument("--cookies-file", help="Файл cookies (JSON или строка Cookie из DevTools)")
+    parser.add_argument(
+        "--cookies-file", help="Файл cookies (JSON или строка Cookie из DevTools)"
+    )
     parser.add_argument("--cookie-header", help="Строка Cookie из DevTools")
     parser.add_argument(
         "--transport",

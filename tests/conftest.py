@@ -58,7 +58,7 @@ async def mock_client(
     team_last_events_responses,
 ):
     """Client with mocked HTTP responses for unit tests."""
-    client = SofaScoreClient(base_url="https://api.sofascore.com")
+    client = SofaScoreClient(base_url="https://www.sofascore.com")
 
     async def mock_get(path: str, params: dict | None = None):
         if path.startswith("/api/v1/team/") and path.endswith("/players"):
@@ -82,7 +82,7 @@ async def mock_client(
             )
         if path.startswith("/api/v1/team/"):
             return team_info_response
-        if path == "/v1/search/all":
+        if path == "/api/v1/search/all":
             if params and params.get("page", 0) > 0:
                 return {"results": []}
             return search_response

@@ -15,7 +15,7 @@ __all__ = [
     "load_cookies_from_file",
 ]
 
-DEFAULT_BASE_URL = "https://api.sofascore.com"
+DEFAULT_BASE_URL = "https://www.sofascore.com"
 DEFAULT_HEADERS = {
     "accept": "application/json",
     "accept-language": "ru,en;q=0.9",
@@ -113,9 +113,7 @@ class HttpSessionManager:
         self.transport = _resolve_transport(transport)
         self.impersonate = impersonate or os.getenv("SOFASCORE_IMPERSONATE", "chrome")
         self.warmup = (
-            warmup
-            if warmup is not None
-            else os.getenv("SOFASCORE_WARMUP", "1") != "0"
+            warmup if warmup is not None else os.getenv("SOFASCORE_WARMUP", "1") != "0"
         )
         self._session: Any = None
         self._warmed_up = False
