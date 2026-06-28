@@ -6,13 +6,16 @@
 
 # Aiosofascore
 
-**Aiosofascore** — асинхронный Python-клиент для SofaScore API (футбол), предоставляющий удобный доступ к данным о командах, матчах, поиску и статистике.
+**Aiosofascore** — асинхронный Python-клиент для SofaScore API (футбол), предоставляющий удобный доступ к данным о командах, матчах, турнирах, игроках и поиску.
 
 ## Возможности
 
-- Получение информации о командах, последних матчах, статистике
-- Поиск игроков, команд, событий, менеджеров
-- Асинхронный HTTP-клиент на базе aiohttp
+- **Team** — информация, игроки, матчи, рейтинги, трансферы, статистика
+- **Event** — детали матча, составы, статистика, инциденты, H2H
+- **Live** — текущие live-матчи
+- **Tournament** — категории, турниры, сезоны, таблицы
+- **Player** — профиль, статистика, трансферы
+- **Search** — поиск команд, игроков, матчей, менеджеров
 
 ## Установка
 
@@ -20,61 +23,57 @@
 pip install aiosofascore
 ```
 
-### Пример работы с командой (все основные возможности)
+## Быстрый старт
+
 ```python
 import asyncio
 from aiosofascore.client import SofaScoreClient
 
-TEAM_ID = 2819  # Можно заменить на нужный ID
-PAGE = 0
-
 async def main():
     async with SofaScoreClient() as client:
-        # Игроки
-        players = await client.team.players.get_team_players(TEAM_ID)
-        print(f"\n=== Игроки команды ===")
-        if players.players:
-            for i, player_item in enumerate(players.players, 1):
-                player = player_item.player
-                print(f"{i:2d}. {player.name} | {player.position or '-'} | №{player.jerseyNumber or '-'}")
-        # Последние события
-        last_events = await client.team.last_events.get_last_events(TEAM_ID, PAGE)
-        print(f"\n=== Последние события ===")
-        for event in last_events.events:
-            tournament_name = event.tournament.name if event.tournament and event.tournament.name else "-"
-            print(f"Event id: {event.id}, турнир: {tournament_name}, дата: {event.startTimestamp}")
-        # Производительность
-        perf = await client.team.performance.get_team_performance(TEAM_ID)
-        print(f"\n=== Производительность ===")
-        if perf.events:
-            for i, event in enumerate(perf.events[:5], 1):
-                home = event.homeTeam.name if event.homeTeam else '-'
-                away = event.awayTeam.name if event.awayTeam else '-'
-                print(f"{i:2d}. {home} vs {away}")
-                if event.homeScore and event.awayScore:
-                    print(f"     Счёт: {event.homeScore.current or 0} - {event.awayScore.current or 0}")
-        # Рейтинги
-        rankings = await client.team.rankings.get_team_rankings(TEAM_ID)
-        print(f"\n=== Рейтинги ===")
-        if rankings.rankings:
-            for r in rankings.rankings:
-                print(f"{r.rowName or '-'}: {r.ranking} место, {r.points} очков, турнир: {r.currentTournamentName}")
-        # Трансферы
-        transfers = await client.team.transfers.get_team_transfers(TEAM_ID)
-        print(f"\n=== Входящие трансферы ===")
-        if transfers.transfersIn:
-            for t in transfers.transfersIn:
-                print(f"{t.player.name if t.player else '-'} из {t.fromTeamName or '-'} за {t.transferFeeDescription or '-'}")
-        print(f"\n=== Исходящие трансферы ===")
-        if transfers.transfersOut:
-            for t in transfers.transfersOut:
-                print(f"{t.player.name if t.player else '-'} в {t.toTeamName or '-'} за {t.transferFeeDescription or '-'}")
+        # Команда
+        info = await client.team.info.get_team_info(2819)
+        print(info.name)
 
-if __name__ == "__main__":
-    asyncio.run(main())
+        # Live-матчи
+        live = await client.live.get_live_events()
+        for e in live.events or []:
+            print(e.homeTeam.name, "vs", e.awayTeam.name)
+
+        # Матч
+        event = await client.event.get_event(11352523)
+        stats = await client.event.get_statistics(11352523)
+
+        # Турнирная таблица
+        standings = await client.tournament.get_standings(17, 52186)
+
+        # Игрок
+        player = await client.player.get_player(12345)
+
+        # Поиск
+        async for result in client.search.search_teams("Arsenal"):
+            print(result.entity.name)
+
+asyncio.run(main())
 ```
 
-### Настройка HTTP-сессии
+## API
+
+| Сервис | Метод | Описание |
+|--------|-------|----------|
+| `client.team.info` | `get_team_info(id)` | Информация о команде |
+| `client.team.players` | `get_team_players(id)` | Состав |
+| `client.team.last_events` | `get_last_events(id, page)` / `iter_last_events(id)` | Последние матчи |
+| `client.team.statistics` | `get_statistics(id, tournament_id, season_id)` | Статистика сезона |
+| `client.event` | `get_event`, `get_lineups`, `get_statistics`, `get_incidents`, `get_h2h` | Матч |
+| `client.live` | `get_live_events()` | Live-матчи |
+| `client.tournament` | `get_categories`, `get_standings`, `get_seasons` | Турниры |
+| `client.player` | `get_player`, `get_statistics`, `get_transfers` | Игрок |
+| `client.search` | `search_teams`, `search_players`, `search_events`, `search_all` | Поиск |
+
+Полный список изменений — в [CHANGELOG.md](CHANGELOG.md).
+
+## Настройка HTTP-сессии
 
 При ошибках 403 (anti-bot challenge) передайте cookies из браузера:
 
@@ -85,8 +84,17 @@ async with SofaScoreClient(cookies={"your_cookie": "value"}) as client:
 
 Или через переменную окружения `SOFASCORE_COOKIES` (JSON). Опционально: `SOFASCORE_PROXY` для прокси.
 
+## Тесты
+
+```bash
+pytest tests/ -m "not integration" -v          # unit-тесты (без сети)
+SOFASCORE_LIVE=1 pytest tests/ -m integration  # live API
+```
+
 ## License
-This project is licensed under the MIT License — see the LICENSE file for details.
+
+MIT — см. [LICENSE](LICENSE).
 
 ## Contact
-If you have any questions or suggestions, feel free to open an issue or contact me via vasilewskij.fil@gmail.com
+
+Вопросы и предложения: issue на GitHub или vasilewskij.fil@gmail.com

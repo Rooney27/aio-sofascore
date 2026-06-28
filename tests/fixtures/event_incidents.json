@@ -1,0 +1,12 @@
+{
+  "incidents": [
+    {
+      "id": 1,
+      "time": 23,
+      "incidentType": "goal",
+      "isHome": true,
+      "homeScore": 1,
+      "awayScore": 0
+    }
+  ]
+}

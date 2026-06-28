@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name="aiosofascore",
-    version="0.1.2.0",
+    version="0.2.1",
     description="API client for SofaScore soccer data",
-    long_description=open('README.md').read(),
+    long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     author="Philip",
     author_email="vasilewskij.fil@gmail.com",
@@ -15,9 +15,9 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requires=[
-        "aiohttp",
-        "pydantic"
-    ],
-    python_requires='>=3.10',  # Укажите минимальную версию Python
+    install_requires=["aiohttp", "pydantic"],
+    extras_require={
+        "curl": ["curl_cffi>=0.6.0"],
+    },
+    python_requires=">=3.10",  # Укажите минимальную версию Python
 )

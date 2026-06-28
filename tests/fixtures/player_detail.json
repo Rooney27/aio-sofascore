@@ -1,0 +1,11 @@
+{
+  "player": {
+    "id": 12345,
+    "name": "Bruno Fernandes",
+    "slug": "bruno-fernandes",
+    "shortName": "B. Fernandes",
+    "position": "M",
+    "jerseyNumber": "8",
+    "team": {"id": 2819, "name": "Manchester United", "slug": "manchester-united"}
+  }
+}

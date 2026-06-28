@@ -1,0 +1,11 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "England",
+      "slug": "england",
+      "flag": "england",
+      "sport": {"id": 1, "name": "Football", "slug": "football"}
+    }
+  ]
+}

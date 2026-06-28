@@ -1,0 +1,16 @@
+{
+  "statistics": [
+    {
+      "period": "ALL",
+      "groups": [
+        {
+          "groupName": "Match overview",
+          "statisticsItems": [
+            {"name": "Ball possession", "home": "57%", "away": "43%"},
+            {"name": "Total shots", "home": "14", "away": "7"}
+          ]
+        }
+      ]
+    }
+  ]
+}

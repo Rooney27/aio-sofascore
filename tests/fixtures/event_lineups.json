@@ -1,0 +1,11 @@
+{
+  "confirmed": true,
+  "home": {
+    "formation": "4-3-3",
+    "players": [{"player": {"id": 1, "name": "Player A"}, "shirtNumber": 1}]
+  },
+  "away": {
+    "formation": "4-2-3-1",
+    "players": [{"player": {"id": 2, "name": "Player B"}, "shirtNumber": 9}]
+  }
+}

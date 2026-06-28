@@ -1,0 +1,14 @@
+{
+  "events": [
+    {
+      "id": 99901,
+      "slug": "live-match",
+      "startTimestamp": 1700000000,
+      "status": {"code": 31, "description": "1st half", "type": "inprogress"},
+      "homeTeam": {"id": 42, "name": "Arsenal", "slug": "arsenal"},
+      "awayTeam": {"id": 38, "name": "Chelsea", "slug": "chelsea"},
+      "homeScore": {"current": 1, "display": 1},
+      "awayScore": {"current": 0, "display": 0}
+    }
+  ]
+}

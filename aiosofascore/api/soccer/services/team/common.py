@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 
+
 class TeamShortInfo(BaseModel):
     id: int
     name: str
@@ -18,6 +19,7 @@ class TeamShortInfo(BaseModel):
     fieldTranslations: Optional[dict] = None
     country: Optional[dict] = None
 
+
 class TournamentCategory(BaseModel):
     id: Optional[int] = None
     name: Optional[str] = None
@@ -26,6 +28,7 @@ class TournamentCategory(BaseModel):
     flag: Optional[str] = None
     alpha2: Optional[str] = None
     country: Optional[dict] = None
+
 
 class UniqueTournament(BaseModel):
     id: Optional[int] = None
@@ -41,6 +44,7 @@ class UniqueTournament(BaseModel):
     fieldTranslations: Optional[dict] = None
     country: Optional[dict] = None
 
+
 class Tournament(BaseModel):
     id: Optional[int] = None
     name: Optional[str] = None
@@ -53,20 +57,24 @@ class Tournament(BaseModel):
     fieldTranslations: Optional[dict] = None
     groupName: Optional[str] = None
 
+
 class Season(BaseModel):
     id: Optional[int] = None
     name: Optional[str] = None
     year: Optional[str] = None
     editor: Optional[bool] = None
 
+
 class RoundInfo(BaseModel):
     round: Optional[int] = None
     name: Optional[str] = None
+
 
 class Status(BaseModel):
     code: Optional[int] = None
     description: Optional[str] = None
     type: Optional[str] = None
+
 
 class Score(BaseModel):
     current: Optional[int] = None
@@ -74,6 +82,7 @@ class Score(BaseModel):
     period1: Optional[int] = None
     period2: Optional[int] = None
     normaltime: Optional[int] = None
+
 
 class TimeInfo(BaseModel):
     injuryTime1: Optional[int] = None
@@ -83,11 +92,13 @@ class TimeInfo(BaseModel):
     overtimeLength: Optional[int] = None
     totalPeriodCount: Optional[int] = None
 
+
 class Country(BaseModel):
     alpha2: Optional[str]
     alpha3: Optional[str]
     name: str
     slug: str
+
 
 class Manager(BaseModel):
     name: str
@@ -96,12 +107,15 @@ class Manager(BaseModel):
     id: Optional[int]
     country: Optional[Country]
 
+
 class VenueCoordinates(BaseModel):
     latitude: float
     longitude: float
 
+
 class City(BaseModel):
     name: str
+
 
 class Venue(BaseModel):
     city: Optional[City]
@@ -115,10 +129,12 @@ class Venue(BaseModel):
     fieldTranslations: Optional[dict]
     stadium: Optional[dict]
 
+
 class TeamColors(BaseModel):
     primary: str
     secondary: str
     text: str
+
 
 class TeamInfo(BaseModel):
     name: str
@@ -144,11 +160,13 @@ class TeamInfo(BaseModel):
     fieldTranslations: Optional[dict]
     timeActive: Optional[list]
 
+
 class PregameForm(BaseModel):
     avgRating: Optional[str]
     position: Optional[int]
     value: Optional[str]
     form: Optional[List[str]]
+
 
 class Player(BaseModel):
     id: Optional[int] = None
@@ -176,26 +194,32 @@ class Player(BaseModel):
     injury: Optional[dict] = None
     fieldTranslations: Optional[dict] = None
 
+
 class PlayerItem(BaseModel):
     player: Player
 
+
 class CricketSupportStaff(BaseModel):
     pass
+
 
 class TransferTeamShort(BaseModel):
     id: Optional[int] = None
     name: Optional[str] = None
     slug: Optional[str] = None
 
+
 class TransferPlayerShort(BaseModel):
     id: Optional[int] = None
     name: Optional[str] = None
     slug: Optional[str] = None
 
+
 class TransferFeeRaw(BaseModel):
     amount: Optional[float] = None
-    currency: Optional[str] = None 
+    currency: Optional[str] = None
+
 
 class Referee(BaseModel):
     id: Optional[int] = None
-    name: Optional[str] = None 
+    name: Optional[str] = None

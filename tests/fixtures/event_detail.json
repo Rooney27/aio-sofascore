@@ -1,0 +1,14 @@
+{
+  "event": {
+    "id": 11352523,
+    "slug": "arsenal-chelsea",
+    "customId": "ArsChe",
+    "startTimestamp": 1700000000,
+    "status": {"code": 100, "description": "Ended", "type": "finished"},
+    "homeTeam": {"id": 42, "name": "Arsenal", "slug": "arsenal"},
+    "awayTeam": {"id": 38, "name": "Chelsea", "slug": "chelsea"},
+    "homeScore": {"current": 2, "display": 2},
+    "awayScore": {"current": 1, "display": 1},
+    "tournament": {"id": 1, "name": "Premier League", "slug": "premier-league"}
+  }
+}

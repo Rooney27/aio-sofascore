@@ -1,0 +1,20 @@
+{
+  "standings": [
+    {
+      "id": 1,
+      "name": "Premier League",
+      "rows": [
+        {
+          "id": 1,
+          "position": 1,
+          "points": 80,
+          "matches": 34,
+          "wins": 25,
+          "draws": 5,
+          "losses": 4,
+          "team": {"id": 42, "name": "Arsenal", "slug": "arsenal"}
+        }
+      ]
+    }
+  ]
+}

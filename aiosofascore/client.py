@@ -1,4 +1,8 @@
 from aiosofascore.adapters.http_client import DEFAULT_BASE_URL, HttpSessionManager
+from aiosofascore.api.soccer.services.event import EventRepository, EventService
+from aiosofascore.api.soccer.services.live import LiveRepository, LiveService
+from aiosofascore.api.soccer.services.player import PlayerRepository, PlayerService
+from aiosofascore.api.soccer.services.search import SearchRepository, SearchService
 from aiosofascore.api.soccer.services.team import (
     TeamInfoRepository,
     TeamInfoService,
@@ -10,10 +14,17 @@ from aiosofascore.api.soccer.services.team import (
     TeamPlayersService,
     TeamRankingsRepository,
     TeamRankingsService,
+    TeamStatisticsRepository,
+    TeamStatisticsSeasonsRepository,
+    TeamStatisticsSeasonsService,
+    TeamStatisticsService,
     TeamTransfersRepository,
     TeamTransfersService,
 )
-from aiosofascore.api.soccer.services.search import SearchRepository, SearchService
+from aiosofascore.api.soccer.services.tournament import (
+    TournamentRepository,
+    TournamentService,
+)
 
 
 class SofaScoreTeamServices:
@@ -26,13 +37,10 @@ class SofaScoreTeamServices:
         self.players = TeamPlayersService(TeamPlayersRepository(http))
         self.rankings = TeamRankingsService(TeamRankingsRepository(http))
         self.transfers = TeamTransfersService(TeamTransfersRepository(http))
-
-
-class SofaScoreSearchServices:
-    """Groups search services."""
-
-    def __init__(self, http: HttpSessionManager):
-        self.search = SearchService(SearchRepository(http))
+        self.statistics_seasons = TeamStatisticsSeasonsService(
+            TeamStatisticsSeasonsRepository(http)
+        )
+        self.statistics = TeamStatisticsService(TeamStatisticsRepository(http))
 
 
 class SofaScoreClient:
@@ -41,7 +49,10 @@ class SofaScoreClient:
 
     Example:
         async with SofaScoreClient() as client:
-            players = await client.team.players.get_team_players(team_id)
+            event = await client.event.get_event(event_id)
+            live = await client.live.get_live_events()
+            async for team in client.search.search_teams("Arsenal"):
+                print(team.entity.name)
     """
 
     def __init__(
@@ -51,6 +62,9 @@ class SofaScoreClient:
         headers: dict[str, str] | None = None,
         proxy: str | None = None,
         max_retries: int = 3,
+        transport: str | None = None,
+        impersonate: str | None = None,
+        warmup: bool | None = None,
     ):
         self.http = HttpSessionManager(
             base_url=base_url or DEFAULT_BASE_URL,
@@ -58,9 +72,16 @@ class SofaScoreClient:
             headers=headers,
             proxy=proxy,
             max_retries=max_retries,
+            transport=transport,
+            impersonate=impersonate,
+            warmup=warmup,
         )
         self.team = SofaScoreTeamServices(self.http)
-        self.search = SofaScoreSearchServices(self.http)
+        self.search = SearchService(SearchRepository(self.http))
+        self.event = EventService(EventRepository(self.http))
+        self.live = LiveService(LiveRepository(self.http))
+        self.tournament = TournamentService(TournamentRepository(self.http))
+        self.player = PlayerService(PlayerRepository(self.http))
 
     async def __aenter__(self) -> "SofaScoreClient":
         await self.http.open()
