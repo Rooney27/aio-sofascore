@@ -1,8 +1,32 @@
 from pydantic import BaseModel, Field
 from typing import Any, Optional, List, Dict
 from .common import (
-    TeamShortInfo, TournamentCategory, UniqueTournament, Tournament, Season, RoundInfo, Status, Score, TimeInfo, Country, Manager, VenueCoordinates, City, Venue, TeamColors, TeamInfo, PregameForm, Player, PlayerItem, CricketSupportStaff, TransferTeamShort, TransferPlayerShort, TransferFeeRaw, Referee
+    TeamShortInfo,
+    TournamentCategory,
+    UniqueTournament,
+    Tournament,
+    Season,
+    RoundInfo,
+    Status,
+    Score,
+    TimeInfo,
+    Country,
+    Manager,
+    VenueCoordinates,
+    City,
+    Venue,
+    TeamColors,
+    TeamInfo,
+    PregameForm,
+    Player,
+    PlayerItem,
+    CricketSupportStaff,
+    TransferTeamShort,
+    TransferPlayerShort,
+    TransferFeeRaw,
+    Referee,
 )
+
 
 class ManOfMatch(BaseModel):
     id: Optional[int] = None
@@ -22,13 +46,16 @@ class ManOfMatch(BaseModel):
     retired: Optional[bool] = None
     deceased: Optional[bool] = None
 
+
 class Periods(BaseModel):
     # Dynamic fields for periods
     pass
 
+
 class TeamSeasonHistoricalForm(BaseModel):
     form: Optional[str] = None
     lastFiveEvents: Optional[List[dict]] = None
+
 
 class PerformanceEvent(BaseModel):
     id: Optional[int] = None
@@ -113,21 +140,25 @@ class PerformanceEvent(BaseModel):
     homeTeamSeasonHistoricalForm: Optional[TeamSeasonHistoricalForm] = None
     awayTeamSeasonHistoricalForm: Optional[TeamSeasonHistoricalForm] = None
 
+
 class TeamPerformanceResponse(BaseModel):
     events: List[PerformanceEvent]
     points: Dict[str, float]
+
 
 class TeamPlayersResponse(BaseModel):
     players: Optional[List[PlayerItem]] = None
     foreignPlayers: Optional[List[PlayerItem]] = None
     nationalPlayers: Optional[List[PlayerItem]] = None
-    supportStaff: Optional[List[CricketSupportStaff]] = None 
+    supportStaff: Optional[List[CricketSupportStaff]] = None
+
 
 class TeamRankingCountry(BaseModel):
     id: Optional[int] = None
     name: Optional[str] = None
     alpha2: Optional[str] = None
     alpha3: Optional[str] = None
+
 
 class TeamRankingTeam(BaseModel):
     id: Optional[int] = None
@@ -138,10 +169,12 @@ class TeamRankingTeam(BaseModel):
     teamColors: Optional[dict] = None
     nameCode: Optional[str] = None
 
+
 class TeamRankingUniqueTournament(BaseModel):
     id: Optional[int] = None
     name: Optional[str] = None
     slug: Optional[str] = None
+
 
 class TeamRankingItem(BaseModel):
     id: Optional[int] = None
@@ -169,8 +202,10 @@ class TeamRankingItem(BaseModel):
     totalTeams: Optional[int] = None
     playingTeams: Optional[int] = None
 
+
 class TeamRankingsResponse(BaseModel):
     rankings: Optional[List[TeamRankingItem]] = None
+
 
 # Transfers
 class TransferItem(BaseModel):
@@ -187,9 +222,11 @@ class TransferItem(BaseModel):
     round: Optional[str] = None
     pick: Optional[str] = None
 
+
 class TeamTransfersResponse(BaseModel):
     transfersIn: Optional[List[TransferItem]] = None
-    transfersOut: Optional[List[TransferItem]] = None 
+    transfersOut: Optional[List[TransferItem]] = None
+
 
 class TeamLastEventsResponse(BaseModel):
     events: Optional[List[PerformanceEvent]] = None

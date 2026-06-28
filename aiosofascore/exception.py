@@ -1,6 +1,8 @@
 from aiohttp import ClientResponse
 
-__all__ = ['ResponseParseContentError']
+__all__ = ["ResponseParseContentError"]
+
+
 class ResponseParseContentError(Exception):
     def __init__(self, response: ClientResponse, path: str):
         self._response = response

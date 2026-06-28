@@ -1,0 +1,11 @@
+{
+  "transferHistory": [
+    {
+      "id": 1,
+      "transferDateTimestamp": 1600000000,
+      "fromTeamName": "Sporting CP",
+      "toTeamName": "Manchester United",
+      "transferFeeDescription": "€55M"
+    }
+  ]
+}

@@ -32,7 +32,9 @@ class SearchService:
         async for item in self.search(query):
             yield item
 
-    async def search_teams(self, query: str) -> AsyncGenerator[SearchEntityResult, None]:
+    async def search_teams(
+        self, query: str
+    ) -> AsyncGenerator[SearchEntityResult, None]:
         async for item in self.search(query, type="team"):
             yield item
 
@@ -42,7 +44,9 @@ class SearchService:
         async for item in self.search(query, type="player"):
             yield item
 
-    async def search_events(self, query: str) -> AsyncGenerator[SearchEntityResult, None]:
+    async def search_events(
+        self, query: str
+    ) -> AsyncGenerator[SearchEntityResult, None]:
         async for item in self.search(query, type="event"):
             yield item
 

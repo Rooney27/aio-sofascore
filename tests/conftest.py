@@ -63,19 +63,47 @@ async def mock_client(
     async def mock_get(path: str, params: dict | None = None):
         if path.startswith("/api/v1/team/") and path.endswith("/players"):
             return team_players_response
-        if path.endswith("/statistics/seasons"):
+        if path.endswith("/statistics/seasons") and "/player/" not in path:
             return team_statistics_seasons_response
-        if "/statistics/" in path:
+        if "/player/" in path and path.endswith("/statistics/seasons"):
+            return load_fixture("player_statistics_seasons.json")
+        if "/player/" in path and "/statistics/" in path:
+            return load_fixture("player_statistics.json")
+        if "/player/" in path and path.endswith("/transfer-history"):
+            return load_fixture("player_transfers.json")
+        if path.startswith("/api/v1/player/"):
+            return load_fixture("player_detail.json")
+        if "/team/" in path and "/statistics/" in path:
             return team_statistics_response
         if "/events/last/" in path:
             page = int(path.rsplit("/", 1)[-1])
-            return team_last_events_responses.get(page, {"events": [], "hasNextPage": False})
+            return team_last_events_responses.get(
+                page, {"events": [], "hasNextPage": False}
+            )
         if path.startswith("/api/v1/team/"):
             return team_info_response
         if path == "/v1/search/all":
             if params and params.get("page", 0) > 0:
                 return {"results": []}
             return search_response
+        if path.startswith("/api/v1/event/") and path.endswith("/statistics"):
+            return load_fixture("event_statistics.json")
+        if path.startswith("/api/v1/event/") and path.endswith("/lineups"):
+            return load_fixture("event_lineups.json")
+        if path.startswith("/api/v1/event/") and path.endswith("/incidents"):
+            return load_fixture("event_incidents.json")
+        if path.startswith("/api/v1/event/"):
+            return load_fixture("event_detail.json")
+        if path.endswith("/events/live"):
+            return load_fixture("live_events.json")
+        if path.endswith("/categories"):
+            return load_fixture("categories.json")
+        if path.endswith("/unique-tournaments"):
+            return load_fixture("unique_tournaments.json")
+        if "/unique-tournament/" in path and path.endswith("/seasons"):
+            return load_fixture("tournament_seasons.json")
+        if "/standings/" in path:
+            return load_fixture("standings.json")
         raise AssertionError(f"Unexpected API path: {path}")
 
     client.http.get = AsyncMock(side_effect=mock_get)

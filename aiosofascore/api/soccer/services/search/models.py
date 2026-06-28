@@ -27,7 +27,7 @@ class Team(BaseModel):
     sport: Optional[Sport] = None
     teamColors: TeamColors
     country: Optional[Country] = None
-    type: Optional[str|int] = None
+    type: Optional[str | int] = None
     gender: Optional[str] = None
 
 
@@ -41,12 +41,14 @@ class Player(BaseModel):
     country: Optional[Country] = None
     sofascoreId: Optional[str] = None
 
+
 class Manager(BaseModel):
     id: int
     name: str
     sport: Optional[Sport] = None
     team: Optional[Team] = None
     country: Optional[Country] = None
+
 
 class TournamentCategory(BaseModel):
     id: int
@@ -89,6 +91,7 @@ class SearchEntityResult(BaseModel):
     model_config = {
         "repr": True,
     }
+
     @model_validator(mode="before")
     @classmethod
     def validate_entity(cls, values: dict) -> dict:

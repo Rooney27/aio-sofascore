@@ -1,4 +1,8 @@
 from aiosofascore.adapters.http_client import DEFAULT_BASE_URL, HttpSessionManager
+from aiosofascore.api.soccer.services.event import EventRepository, EventService
+from aiosofascore.api.soccer.services.live import LiveRepository, LiveService
+from aiosofascore.api.soccer.services.player import PlayerRepository, PlayerService
+from aiosofascore.api.soccer.services.search import SearchRepository, SearchService
 from aiosofascore.api.soccer.services.team import (
     TeamInfoRepository,
     TeamInfoService,
@@ -17,7 +21,10 @@ from aiosofascore.api.soccer.services.team import (
     TeamTransfersRepository,
     TeamTransfersService,
 )
-from aiosofascore.api.soccer.services.search import SearchRepository, SearchService
+from aiosofascore.api.soccer.services.tournament import (
+    TournamentRepository,
+    TournamentService,
+)
 
 
 class SofaScoreTeamServices:
@@ -42,7 +49,8 @@ class SofaScoreClient:
 
     Example:
         async with SofaScoreClient() as client:
-            players = await client.team.players.get_team_players(team_id)
+            event = await client.event.get_event(event_id)
+            live = await client.live.get_live_events()
             async for team in client.search.search_teams("Arsenal"):
                 print(team.entity.name)
     """
@@ -64,6 +72,10 @@ class SofaScoreClient:
         )
         self.team = SofaScoreTeamServices(self.http)
         self.search = SearchService(SearchRepository(self.http))
+        self.event = EventService(EventRepository(self.http))
+        self.live = LiveService(LiveRepository(self.http))
+        self.tournament = TournamentService(TournamentRepository(self.http))
+        self.player = PlayerService(PlayerRepository(self.http))
 
     async def __aenter__(self) -> "SofaScoreClient":
         await self.http.open()

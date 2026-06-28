@@ -1,0 +1,14 @@
+{
+  "groups": [
+    {
+      "uniqueTournaments": [
+        {
+          "id": 17,
+          "name": "Premier League",
+          "slug": "premier-league",
+          "userCount": 1000000
+        }
+      ]
+    }
+  ]
+}

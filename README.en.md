@@ -6,14 +6,16 @@
 
 # Aiosofascore
 
-**Aiosofascore** is an asynchronous Python client for the SofaScore API (football), providing easy access to team, match, search, and statistics data.
+**Aiosofascore** is an asynchronous Python client for the SofaScore API (football), providing access to teams, matches, tournaments, players, and search.
 
 ## Features
 
-- Get team info, last matches, and statistics
-- Search for players, teams, events, managers
-- Asynchronous HTTP client based on aiohttp
-- Convenient SofaScoreClient facade for all services
+- **Team** — info, players, events, rankings, transfers, statistics
+- **Event** — match details, lineups, statistics, incidents, H2H
+- **Live** — live matches
+- **Tournament** — categories, tournaments, seasons, standings
+- **Player** — profile, statistics, transfers
+- **Search** — teams, players, events, managers
 
 ## Installation
 
@@ -23,61 +25,37 @@ pip install aiosofascore
 
 ## Quick Start
 
-### Team example (all main features)
 ```python
 import asyncio
 from aiosofascore.client import SofaScoreClient
 
-TEAM_ID = 2819  # You can change to any team ID
-PAGE = 0
-
 async def main():
     async with SofaScoreClient() as client:
-        # Players
-        players = await client.team.players.get_team_players(TEAM_ID)
-        print(f"\n=== Team players ===")
-        if players.players:
-            for i, player_item in enumerate(players.players, 1):
-                player = player_item.player
-                print(f"{i:2d}. {player.name} | {player.position or '-'} | #{player.jerseyNumber or '-'}")
-        # Last events
-        last_events = await client.team.last_events.get_last_events(TEAM_ID, PAGE)
-        print(f"\n=== Last events ===")
-        for event in last_events.events:
-            tournament_name = event.tournament.name if event.tournament and event.tournament.name else "-"
-            print(f"Event id: {event.id}, tournament: {tournament_name}, date: {event.startTimestamp}")
-        # Performance
-        perf = await client.team.performance.get_team_performance(TEAM_ID)
-        print(f"\n=== Performance ===")
-        if perf.events:
-            for i, event in enumerate(perf.events[:5], 1):
-                home = event.homeTeam.name if event.homeTeam else '-'
-                away = event.awayTeam.name if event.awayTeam else '-'
-                print(f"{i:2d}. {home} vs {away}")
-                if event.homeScore and event.awayScore:
-                    print(f"     Score: {event.homeScore.current or 0} - {event.awayScore.current or 0}")
-        # Rankings
-        rankings = await client.team.rankings.get_team_rankings(TEAM_ID)
-        print(f"\n=== Rankings ===")
-        if rankings.rankings:
-            for r in rankings.rankings:
-                print(f"{r.rowName or '-'}: {r.ranking} place, {r.points} pts, tournament: {r.currentTournamentName}")
-        # Transfers
-        transfers = await client.team.transfers.get_team_transfers(TEAM_ID)
-        print(f"\n=== Transfers in ===")
-        if transfers.transfersIn:
-            for t in transfers.transfersIn:
-                print(f"{t.player.name if t.player else '-'} from {t.fromTeamName or '-'} for {t.transferFeeDescription or '-'}")
-        print(f"\n=== Transfers out ===")
-        if transfers.transfersOut:
-            for t in transfers.transfersOut:
-                print(f"{t.player.name if t.player else '-'} to {t.toTeamName or '-'} for {t.transferFeeDescription or '-'}")
+        info = await client.team.info.get_team_info(2819)
+        live = await client.live.get_live_events()
+        event = await client.event.get_event(11352523)
+        standings = await client.tournament.get_standings(17, 52186)
+        player = await client.player.get_player(12345)
+        async for result in client.search.search_teams("Arsenal"):
+            print(result.entity.name)
 
-if __name__ == "__main__":
-    asyncio.run(main())
+asyncio.run(main())
 ```
 
-### HTTP session configuration
+## API Overview
+
+| Service | Methods |
+|---------|---------|
+| `client.team` | info, players, last_events, performance, rankings, transfers, statistics |
+| `client.event` | get_event, get_lineups, get_statistics, get_incidents, get_h2h, get_pregame_form, get_managers |
+| `client.live` | get_live_events |
+| `client.tournament` | get_categories, get_unique_tournaments, get_seasons, get_standings |
+| `client.player` | get_player, get_statistics_seasons, get_statistics, get_transfers |
+| `client.search` | search_teams, search_players, search_events, search_managers, search_all |
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
+
+## HTTP Session Configuration
 
 If you encounter 403 (anti-bot challenge) errors, pass browser cookies:
 
@@ -86,10 +64,19 @@ async with SofaScoreClient(cookies={"your_cookie": "value"}) as client:
     ...
 ```
 
-Or set the `SOFASCORE_COOKIES` environment variable (JSON). Optionally use `SOFASCORE_PROXY` for a proxy.
+Or set `SOFASCORE_COOKIES` (JSON). Optionally use `SOFASCORE_PROXY` for a proxy.
+
+## Tests
+
+```bash
+pytest tests/ -m "not integration" -v
+SOFASCORE_LIVE=1 pytest tests/ -m integration
+```
 
 ## License
-This project is licensed under the MIT License — see the LICENSE file for details.
+
+MIT — see [LICENSE](LICENSE).
 
 ## Contact
-If you have any questions or suggestions, feel free to open an issue or contact me via vasilewskij.fil@gmail.com 
+
+Questions and suggestions: GitHub issue or vasilewskij.fil@gmail.com
