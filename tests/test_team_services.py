@@ -60,3 +60,9 @@ async def test_get_team_last_events(client):
     last_events = await client.team.last_events.get_last_events(TEAM_ID, PAGE)
     assert hasattr(last_events, "events")
     assert hasattr(last_events, "hasNextPage")
+
+
+@pytest.mark.asyncio
+async def test_get_statistics_seasons(client):
+    seasons = await client.team.statistics_seasons.get_statistics_seasons(TEAM_ID)
+    assert hasattr(seasons, "uniqueTournamentSeasons")

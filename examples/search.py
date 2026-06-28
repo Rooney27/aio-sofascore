@@ -5,14 +5,14 @@ async def main():
     async with SofaScoreClient() as client:
         # Поиск менеджеров по имени Alexander
         print("=== Менеджеры с именем Alexander ===")
-        async for result in client.search.search.search_entities("Alexander", type="manager"):
+        async for result in client.search.search_managers("Alexander"):
             name = result.entity.name if result.entity and hasattr(result.entity, 'name') else "-"
             team = result.entity.team.name if result.entity and hasattr(result.entity, 'team') and result.entity.team and hasattr(result.entity.team, 'name') else "-"
             print(f"Имя: {name}, Тип: {result.type}, Команда: {team}")
             print('===================')
         # Поиск матчей Arsenal vs Manchester united
         print("=== Матчи Arsenal vs Manchester united ===")
-        async for result in client.search.search.search_entities("Arsenal vs Manchester united", type="event"):
+        async for result in client.search.search_events("Arsenal vs Manchester united"):
             if result.entity and hasattr(result.entity, 'name'):
                 name = result.entity.name
             else:

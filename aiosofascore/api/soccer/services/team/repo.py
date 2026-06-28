@@ -1,4 +1,4 @@
-from aiosofascore.api.soccer.services.team.models import TeamPerformanceResponse, TeamLastEventsResponse, TeamPlayersResponse, TeamRankingsResponse, TeamTransfersResponse
+from aiosofascore.api.soccer.services.team.models import TeamPerformanceResponse, TeamLastEventsResponse, TeamPlayersResponse, TeamRankingsResponse, TeamTransfersResponse, TeamStatisticsSeasonsResponse, TeamStatisticsResponse
 from aiosofascore.api.soccer.services.team.common import TeamInfo
 from aiosofascore.api.soccer.services.team.base import BaseRepository
 
@@ -33,4 +33,25 @@ class TeamRankingsRepository(BaseRepository):
 class TeamTransfersRepository(BaseRepository):
     async def get_team_transfers(self, team_id: int) -> TeamTransfersResponse:
         url = f"/api/v1/team/{team_id}/transfers"
-        return await self._get(url, TeamTransfersResponse) 
+        return await self._get(url, TeamTransfersResponse)
+
+
+class TeamStatisticsSeasonsRepository(BaseRepository):
+    async def get_statistics_seasons(self, team_id: int) -> TeamStatisticsSeasonsResponse:
+        url = f"/api/v1/team/{team_id}/statistics/seasons"
+        return await self._get(url, TeamStatisticsSeasonsResponse)
+
+
+class TeamStatisticsRepository(BaseRepository):
+    async def get_statistics(
+        self,
+        team_id: int,
+        tournament_id: int,
+        season_id: int,
+        filter: str = "overall",
+    ) -> TeamStatisticsResponse:
+        url = (
+            f"/api/v1/team/{team_id}/unique-tournament/{tournament_id}"
+            f"/season/{season_id}/statistics/{filter}"
+        )
+        return await self._get(url, TeamStatisticsResponse)
